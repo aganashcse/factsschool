@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+    {% block content %}
+    <div id="page-wrapper">
+    <div class="row">
+                
+    <div class="panel panel-default">
+            <div class="panel-heading">
+                    <div style="overflow: hidden;">
+                        <p style="float: left;">
+                            Tags: {% for tag in cur_page_data['Tags'] %}{{tag}} {% endfor %}
+                        </p>
+                        <p style="float: right; margin-right: 30%;">Created by: {% if current_user.id == cur_page_data['owner_email'] %}
+                            You {% else %}  {{cur_page_data['owner_email']}} {% endif %}</p>
+                        </div>
+                        <div>
+                <h1 style="margin-left: 5%;">{{cur_page_data['qn_post']}}</h1></div>
+                <div style="overflow: hidden;">
+                        <p style="float: left;">Asked on: {{cur_page_data['qn_created_on']}}</p>
+                        <p style="float: right; margin-right: 30%">Post Visibility: {{cur_page_data['qn_post_visible']}} </p>
+                    </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                <ul class="timeline">
+                    {% for comment in cur_page_cmt %}
+                    <li class="timeline-inverted">
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">{{comment.get('commenter')}}</h4>
+                                <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{comment.get('commented_on')}}</small>
+                                </p>
+                            </div>
+                            <div class="timeline-body">
+                                    <div>
+                                            {{comment.get('comment') | safe}}
+                                    </div>
+                                <hr>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="like_cmt">
+                                            <i onclick="like_post(this)" class="fa fa-thumbs-up"></i>
+                                            <input type="hidden" id="like_cmt_val" name="like_cmt_val" value="false"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    {% if current_user.is_authenticated %}
+                    <li class="timeline-inverted">
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title"><strong>{{current_user.id}}</strong></h4>
+                                </div>
+                                <div class="timeline-body">
+                                        <form role="form" method="POST" action="/post_comment" id="comment_form">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <textarea id="comment" name="comment" required></textarea>
+                                                    <input type="hidden" id="browser_time" name="browser_time"/><br>
+                                                    <button class="btn btn-primary" type="submit">Post</button>
+                                            </div>
+                                            </fieldset>
+                                        </form>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="timeline-inverted">
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title">Please login for a new post!</h4>
+                                    </div>
+                                    <div class="timeline-body">
+                                            <h5><i class="fa fa-hand-o-right" aria-hidden="true"></i> <a href="/login">click here to login</a></h5>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                </ul>
+                
+            </div>
+        </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!--row-->
+    </div>
+    <!-- /#page-wrapper -->
+    
+    {% endblock %}

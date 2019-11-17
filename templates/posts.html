@@ -1,0 +1,73 @@
+    {% extends 'base.html' %}
+    {% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+                    
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                        <div style="text-align: center; margin-left: -5%">
+                    <h1>Top posts:</h1></div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ul class="timeline">
+                        {% for post in cur_page_data %}
+                        <li class="timeline-inverted">
+                            <div class="timeline-panel">
+                                <div style="overflow: hidden;">
+                                    <p style="float: left;">Tags: {% for tag in post['Tags'] %}{{tag}} {% endfor %}</p>
+                                    <p style="float: right; margin-right: 30%;">Created by: {% if current_user.id == post['owner_email'] %}
+                                                You {% else %}  {{post['owner_email']}} {% endif %}</p>
+                                            </div>
+                                            <div>
+                                                
+                                    <h1 style="margin-left: 5%;">
+                                            <a href="{{'/post/%s'%post['qn_post']}}">{{post['qn_post']}}</a>
+                                    </h1></div>
+                                    <div style="overflow: hidden;">
+                                            <p style="float: left;">Asked on:<small class="text-muted"><i class="fa fa-clock-o"></i> {{post['qn_created_on']}}</small></p>
+                                            <p style="float: right; margin-right: 30%;">Post Visibility: {{post['qn_post_visible']}} </p>
+                                        </div>
+                                        
+                                        </div>
+                        </li>
+                        {% endfor %}
+                        {% if current_user.is_authenticated %}
+                        <li class="timeline-inverted">
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title">{{current_user.id}}</h4>
+                                    </div>
+                                    <div class="timeline-body">
+                                            <h5>Want to create a new post?<i class="fa fa-hand-o-right" aria-hidden="true"></i> <a href="/ask">click here</a></h5>
+                                    </div>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li class="timeline-inverted">
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                            <h4 class="timeline-title">Please login for a new post!</h4>
+                                        </div>
+                                        <div class="timeline-body">
+                                                <h5><i class="fa fa-hand-o-right" aria-hidden="true"></i> <a href="/login">click here to login</a></h5>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                    </ul>
+                    
+                </div>
+            </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!--row-->
+        </div>
+        <!-- /#page-wrapper -->
+    
+    {% endblock %}
